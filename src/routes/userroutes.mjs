@@ -3,6 +3,7 @@ import {query,validationResult,checkSchema,matchedData} from "express-validator"
 import { userQuerySchema,uservalidation } from "../utlis/validationschema.mjs";
 import user from "../utlis/constant.mjs";
 import { modeluser } from "../mongoose/schemas/schemauser.mjs";
+import { hashpassword } from "../utlis/hashpassword.mjs";
 const router = Router();
 router.get("/userss",(req,res)=>{
     console.log(req.sessionID);
@@ -34,7 +35,9 @@ router.post("/user",
     if(!result.isEmpty()){
         return res.status(400).send({error:result.array()})
     }
-    const data = matchedData(result);
+    const data = matchedData(req);
+    data.pass = hashpassword(data.pass);
+    console.log(data);
     const newuser = new modeluser(data);
     try{
         const saveuser = await newuser.save();
