@@ -23,7 +23,11 @@ export   const uservalidation = {
             errorMessage:"name should be string",
         }
     },
-    
+    pass: {                                     
+    in: ["body"],
+    isString: true,
+    notEmpty: { errorMessage: "password is required" },
+  },
 }
 export const userQuerySchema = {
   filter: {
