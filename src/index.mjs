@@ -5,7 +5,8 @@ import user from "./utlis/constant.mjs";
 import passport from "passport";
 import "./startegy/local-startegy.mjs";
 import router from "./routes/userroutes.mjs";
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
+import MongoStore from "connect-mongo";
 
 
 const app = express();
@@ -21,6 +22,9 @@ app.use(session({
     saveUninitialized:false,
     resave:false,
     cookie:{maxAge: 60000*60},
+    store: new MongoStore({
+        client:mongoose.connection.getClient(),
+    })
     
 }))
 
