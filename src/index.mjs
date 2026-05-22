@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cookieParser, { signedCookie } from "cookie-parser";
 import session from "express-session";
@@ -9,23 +10,24 @@ import mongoose from "mongoose";
 
 
 const app = express();
-mongoose.connect("mongodb://localhost/express")
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/express")
 .then(()=> console.log(`connected to database`))
 .catch((err) => console.log(`err:${err}`))
 
 
 app.use(express.json());
-app.use(cookieParser("token"));
+app.use(cookieParser(process.env.COOKIE_SECRET || "token"));
 app.use(session({
-    secret:"my secret key",
+    secret: process.env.SESSION_SECRET || "dev-secret-key",
     saveUninitialized:false,
     resave:false,
     cookie:{maxAge: 60000*60},
     
 }))
 
-app.listen(3000, () => {
-    console.log(`{port running on 3000}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`server running on port ${PORT}`);
 });
 
 
