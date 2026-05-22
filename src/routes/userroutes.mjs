@@ -45,6 +45,9 @@ router.post("/user",
     }
     catch(err){
         console.log(err);
+        if (err.code === 11000)
+            return res.status(400).send({ error: "Username already exists", code: "DUPLICATE_USERNAME" });
+        return res.status(500).send({ error: "Failed to create user" });
     }
    
 });
