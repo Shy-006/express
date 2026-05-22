@@ -23,10 +23,21 @@ export   const uservalidation = {
             errorMessage:"name should be string",
         }
     },
-    pass: {                                     
+    pass: {
     in: ["body"],
     isString: true,
     notEmpty: { errorMessage: "password is required" },
+    isLength: {
+      options: { min: 8 },
+      errorMessage: "password must be at least 8 characters long",
+    },
+    custom: {
+      options: (value) => {
+        if (!/[A-Z]/.test(value)) throw new Error("password must contain at least one uppercase letter");
+        if (!/[0-9]/.test(value)) throw new Error("password must contain at least one number");
+        return true;
+      },
+    },
   },
 }
 export const userQuerySchema = {
